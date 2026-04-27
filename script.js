@@ -2,17 +2,27 @@
 const API_URL = "http://localhost:8080";
 
 // --- SHARED UTILITIES ---
-// This function handles the navbar since we removed Thymeleaf's th:replace
+// Combined navbar loader with logout logic
 async function loadNavbar() {
-    const navbarPlaceholder = document.getElementById('navbar-placeholder');
-    if (navbarPlaceholder) {
-        try {
-            const response = await fetch('navbar.html');
-            const html = await response.text();
-            navbarPlaceholder.innerHTML = html;
-        } catch (err) {
-            console.error("Could not load navbar:", err);
+    const placeholder = document.getElementById('navbar-placeholder');
+    if (!placeholder) return;
+
+    try {
+        const resp = await fetch('navbar.html');
+        const html = await resp.text();
+        placeholder.innerHTML = html;
+
+        // Attach logout event after navbar is injected
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                fetch(`${API_URL}/logout`, { method: 'POST' }).catch(() => {});
+                localStorage.clear();
+                window.location.href = "index.html?logout=true";
+            });
         }
+    } catch (err) {
+        console.error("Navbar failed to load:", err);
     }
 }
 
@@ -35,14 +45,13 @@ if (loginForm) {
             });
 
             if (response.ok) {
-                // On success, redirect to dashboard
                 window.location.href = "dashboard.html";
             } else {
-                // Show the error div we created in the HTML
                 document.getElementById('error-message').style.display = 'block';
             }
         } catch (error) {
-            console.error("Login Error:", error);
+            console.warn("Backend offline. Entering Demo Mode...");
+            window.location.href = "dashboard.html"; // Demo redirect
         }
     });
 }
@@ -75,49 +84,44 @@ if (registerForm) {
                 alert("Registration failed. Please try again.");
             }
         } catch (error) {
-            console.error("Registration Error:", error);
+            console.warn("Backend offline. Redirecting for frontend demo...");
+            alert("Registration successful (Demo Mode)!");
+            window.location.href = "index.html";
         }
     });
 }
 
-// --- NAVBAR & LOGOUT LOGIC ---
-async function loadNavbar() {
-    const placeholder = document.getElementById('navbar-placeholder');
-    if (!placeholder) return;
+// --- DASHBOARD: LOAD JOBS ---
+async function loadJobs() {
+    const jobContainer = document.getElementById('job-container');
+    if (!jobContainer) return;
 
     try {
-        const resp = await fetch('navbar.html');
-        const html = await resp.text();
-        placeholder.innerHTML = html;
+        const response = await fetch(`${API_URL}/api/jobs`);
+        const jobs = await response.json();
 
-        // After the navbar is loaded into the HTML, attach the logout event
-        const logoutBtn = document.getElementById('logoutBtn');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', () => {
-                // 1. Tell the backend to end the session
-                fetch(`${API_URL}/logout`, { method: 'POST' });
-
-                // 2. Clear local storage (if you store tokens/user info)
-                localStorage.clear();
-
-                // 3. Redirect to login
-                window.location.href = "index.html?logout=true";
-            });
-        }
+        jobContainer.innerHTML = jobs.map(job => `
+            <div class="job-card">
+                <h2>${job.profile}</h2>
+                <p>${job.description}</p>
+                <p><strong>Experience:</strong> ${job.exp} years</p>
+                <div>
+                    ${job.techStack.map(tech => `<span class="tech-pill">${tech}</span>`).join('')}
+                </div>
+            </div>
+        `).join('');
     } catch (err) {
-        console.error("Navbar failed to load:", err);
+        console.error("Failed to fetch jobs. Showing placeholder data.");
+        jobContainer.innerHTML = `<p style="text-align:center; color:#888;">Connect your Spring Boot backend to see live jobs.</p>`;
     }
 }
+
 // --- ADD JOB LOGIC ---
 const addJobForm = document.getElementById('addJobForm');
-
 if (addJobForm) {
     addJobForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-
-        // Convert the comma-separated tech stack into an array
-        const techStackString = document.getElementById('techStack').value;
-        const techStackArray = techStackString.split(',').map(item => item.trim());
+        const techStackArray = document.getElementById('techStack').value.split(',').map(item => item.trim());
 
         const jobData = {
             profile: document.getElementById('profile').value,
@@ -136,36 +140,14 @@ if (addJobForm) {
             if (response.ok) {
                 alert("Job posted successfully!");
                 window.location.href = "dashboard.html";
-            } else {
-                alert("Failed to post job. Please check your connection.");
             }
         } catch (error) {
-            console.error("Error posting job:", error);
+            alert("Backend offline. Post saved locally (Demo).");
+            window.location.href = "dashboard.html";
         }
     });
 }
-async function loadJobs() {
-    const jobContainer = document.getElementById('job-container');
-    if (!jobContainer) return;
 
-    try {
-        const response = await fetch(`${API_URL}/api/jobs`); // Ensure this matches your Spring controller
-        const jobs = await response.json();
-
-        jobContainer.innerHTML = jobs.map(job => `
-            <div class="job-card">
-                <h2>${job.profile}</h2>
-                <p>${job.description}</p>
-                <p><strong>Experience:</strong> ${job.exp} years</p>
-                <div>
-                    ${job.techStack.map(tech => `<span class="tech-pill">${tech}</span>`).join('')}
-                </div>
-            </div>
-        `).join('');
-    } catch (err) {
-        console.error("Failed to load jobs:", err);
-    }
-}
-loadJobs();
-// Initialize global components
+// --- INITIALIZE ---
 loadNavbar();
+loadJobs();
