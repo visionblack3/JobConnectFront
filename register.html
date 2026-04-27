@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - JobConnect</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="auth-container">
+
+    <div class="card">
+        <h2>Create Account</h2>
+
+        <form id="registerForm">
+            <input type="text" id="reg-username" name="username" placeholder="Username" required>
+            <input type="email" id="reg-email" name="email" placeholder="Email (Gmail)" required>
+            <input type="password" id="reg-password" name="password" placeholder="Password" required>
+
+            <label for="role">I am a:</label>
+            <select name="role" id="role" required>
+                <option value="ROLE_USER">Job Seeker</option>
+                <option value="ROLE_RECRUITER">Recruiter</option>
+            </select>
+
+            <div style="margin-top: 10px;">
+                <label>Mobile Number</label>
+                <input type="text" id="reg-phone" name="phoneNumber" placeholder="+919876543210" required>
+                <small style="color: #888; font-size: 12px;">Include country code (e.g., +91)</small>
+            </div>
+
+            <button type="submit" class="btn btn-success">Sign Up</button>
+            <a href="index.html" class="btn-back" style="display: block; text-align: center; margin-top: 15px; color: #666; text-decoration: none;">Back to Login</a>
+        </form>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

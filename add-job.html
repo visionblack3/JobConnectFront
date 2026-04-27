@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post a New Job - JobConnect</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="navbar-placeholder"></div>
+
+<div class="auth-container" style="height: auto; padding: 50px 0;">
+    <div class="card" style="width: 500px;">
+        <h2>Post a New Job</h2>
+
+        <form id="addJobForm">
+            <label for="profile">Job Title</label>
+            <input type="text" id="profile" name="profile" placeholder="e.g. Java Developer" required>
+
+            <label for="description">Job Description</label>
+            <textarea id="description" name="description" rows="5" placeholder="Describe the role and responsibilities..." required></textarea>
+
+            <label for="exp">Experience (Years)</label>
+            <input type="number" id="exp" name="exp" placeholder="e.g. 2" required>
+
+            <label for="techStack">Tech Stack</label>
+            <input type="text" id="techStack" name="techStack" placeholder="e.g. Java, Spring Boot, MySQL" required>
+
+            <button type="submit" class="btn btn-success" style="margin-top: 20px;">Submit Job Posting</button>
+        </form>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
