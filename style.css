@@ -1,98 +1,60 @@
-/* --- 1. GLOBAL RESET & BASE --- */
+/* --- Base Styles --- */
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f7f6;
     margin: 0;
     padding: 0;
-    color: #333;
 }
 
-/* --- 2. AUTH PAGES (Login & Register) --- */
-/* Centering the card in the middle of the screen */
+/* --- Centering Logic --- */
 .auth-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    justify-content: center; /* Centers horizontally */
+    align-items: center;     /* Centers vertically */
+    height: 100vh;           /* Uses full screen height */
 }
 
 .card {
     background: white;
-    padding: 2.5rem;
+    padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    width: 380px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
     text-align: center;
 }
 
-.card h2 {
-    color: #007bff;
-    margin-bottom: 1.5rem;
-    margin-top: 0;
-}
-
-/* --- 3. ERROR & SUCCESS MESSAGES --- */
-/* Positioned inside the card, on top of inputs */
+/* --- Error Message Styling --- */
 .error {
     color: #721c24;
     background-color: #f8d7da;
     border: 1px solid #f5c6cb;
-    padding: 10px;
+    padding: 12px;
     border-radius: 6px;
-    margin-bottom: 15px; /* Creates space above the username input */
+    margin-bottom: 20px;     /* Pushes inputs down when visible */
     font-size: 14px;
-    display: none; /* Hidden by default; triggered by JS */
+    display: none;           /* Hidden until login fails */
 }
 
-.success {
-    color: #155724;
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    padding: 10px;
-    border-radius: 6px;
-    margin-bottom: 15px;
-    font-size: 14px;
-    display: none;
-}
-
-/* --- 4. FORM ELEMENTS --- */
-input, select, textarea {
+/* --- Inputs & Buttons --- */
+input {
     width: 100%;
     padding: 12px;
-    margin: 10px 0;
+    margin-bottom: 15px;
     border: 1px solid #ddd;
     border-radius: 6px;
-    box-sizing: border-box; /* Keeps padding from breaking width */
+    font-size: 16px;
 }
 
-/* --- 5. NAVIGATION BAR (Dashboard) --- */
-.navbar {
-    background-color: #333;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 5%;
-}
-
-.navbar-logo {
-    color: #4CAF50;
-    margin: 0;
-    font-size: 1.6rem;
-}
-
-/* Forces "+ Post Job" and "Logout" to stay horizontal */
-.nav-right {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 15px;
-}
-
-/* --- 6. BUTTONS --- */
-.btn {
+.btn-primary {
     width: 100%;
     padding: 12px;
+    background-color: #007bff;
+    color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -101,50 +63,25 @@ input, select, textarea {
     transition: 0.3s;
 }
 
-.btn-primary { background-color: #007bff; color: white; }
-.btn-primary:hover { background-color: #0056b3; }
-
-/* Dashboard "Post Job" button (overrides width: 100%) */
-.btn-success { 
-    background-color: #28a745; 
-    color: white; 
-    width: auto !important; 
-    padding: 10px 20px; 
+.btn-primary:hover {
+    background-color: #0056b3;
 }
-.btn-success:hover { background-color: #218838; }
 
-.btn-logout {
-    background-color: #dc3545;
+/* --- Dashboard Navbar (Included for unity) --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #333;
+    padding: 10px 5%;
     color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
 }
 
-/* --- 7. DASHBOARD CONTENT --- */
-.container {
-    max-width: 1100px;
-    margin: 30px auto;
-    padding: 0 20px;
+.nav-right {
+    display: flex;
+    gap: 15px;
+    align-items: center;
 }
 
-.job-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px;
-}
-
-.job-card {
-    background: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    border-top: 5px solid #007bff;
-}
-
-/* --- 8. HELPERS --- */
 .mt-3 { margin-top: 15px; }
 a { color: #007bff; text-decoration: none; }
-a:hover { text-decoration: underline; }
