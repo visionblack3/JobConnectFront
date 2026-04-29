@@ -1,127 +1,120 @@
-/* --- Global Reset & Typography --- */
+/* --- 1. GLOBAL RESET & BASE --- */
 body {
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f7f6;
     margin: 0;
     padding: 0;
     color: #333;
 }
 
-/* --- Navigation Bar (The Horizontal Fix) --- */
+/* --- 2. AUTH PAGES (Login/Register Centering) --- */
+/* This container ensures the Login card stays in the middle of the screen */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Full screen height */
+}
+
+.card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    width: 380px;
+    text-align: center;
+}
+
+.card h2 {
+    color: #007bff;
+    margin-bottom: 1.5rem;
+}
+
+/* --- 3. FORM ELEMENTS --- */
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box; /* Important: keeps padding inside the width */
+}
+
+/* --- 4. NAVIGATION BAR (Dashboard Fix) --- */
 .navbar {
     background-color: #333;
     color: white;
     display: flex;
-    justify-content: space-between; /* Pushes Logo to left, Actions to right */
-    align-items: center;            /* Centers items vertically */
+    justify-content: space-between;
+    align-items: center;
     padding: 12px 5%;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 .navbar-logo {
     color: #4CAF50;
     margin: 0;
     font-size: 1.6rem;
-    font-weight: bold;
 }
 
-/* This container ensures buttons stay in a horizontal line */
+/* This fixes the horizontal alignment of Post Job and Logout */
 .nav-right {
-    display: flex;       /* The "Magic" property */
-    flex-direction: row; /* Force horizontal alignment */
-    align-items: center; /* Vertical alignment */
-    gap: 15px;           /* Space between Post Job and Logout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
 }
 
-/* --- Unified Button Styles --- */
-.btn-success {
-    background-color: #28a745;
-    color: white;
+/* --- 5. UNIFIED BUTTONS --- */
+.btn {
+    width: 100%;
+    padding: 12px;
     border: none;
-    padding: 8px 18px;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: bold;
+    font-size: 16px;
     transition: 0.3s;
-    white-space: nowrap; /* Prevents text wrapping */
 }
 
-.btn-success:hover {
-    background-color: #218838;
-}
+.btn-primary { background-color: #007bff; color: white; }
+.btn-primary:hover { background-color: #0056b3; }
+
+.btn-success { background-color: #28a745; color: white; width: auto !important; padding: 10px 20px; }
+.btn-success:hover { background-color: #218838; }
 
 .btn-logout {
     background-color: #dc3545;
     color: white;
     border: none;
-    padding: 8px 18px;
-    border-radius: 4px;
+    padding: 10px 20px;
+    border-radius: 6px;
     cursor: pointer;
-    font-weight: 600;
-    transition: 0.3s;
+    font-weight: bold;
 }
 
-.btn-logout:hover {
-    background-color: #c82333;
-}
-
-/* --- Dashboard Content Layout --- */
+/* --- 6. DASHBOARD CONTENT & GRID --- */
 .container {
     max-width: 1100px;
     margin: 30px auto;
     padding: 0 20px;
 }
 
-.header-section h1 {
-    color: #2c3e50;
-    font-size: 2rem;
-    margin-bottom: 10px;
-}
-
-hr {
-    border: 0;
-    border-top: 2px solid #ddd;
-    margin-bottom: 30px;
-}
-
-/* --- Job Grid System --- */
 .job-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 25px;
 }
 
-/* --- Job Card Styling --- */
 .job-card {
     background: white;
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    border-top: 5px solid #4CAF50; /* Visual accent */
-    transition: transform 0.2s;
+    border-top: 5px solid #007bff;
 }
 
-.job-card:hover {
-    transform: translateY(-5px);
-}
-
-.job-card h3 {
-    margin-top: 0;
-    color: #333;
-}
-
-.btn-apply {
-    width: 100%;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 15px;
-}
-
-.btn-apply:hover {
-    background-color: #0056b3;
-}
+/* --- 7. UTILITIES --- */
+.text-center { text-align: center; }
+.mt-3 { margin-top: 15px; }
+a { color: #007bff; text-decoration: none; }
+a:hover { text-decoration: underline; }
