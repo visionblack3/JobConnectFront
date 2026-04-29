@@ -1,120 +1,244 @@
-/* --- 1. GLOBAL RESET & BASE --- */
+/* --- Global Styles --- */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f7f6;
+    background: #f0f2f5;
     margin: 0;
     padding: 0;
     color: #333;
 }
 
-/* --- 2. AUTH PAGES (Login/Register Centering) --- */
-/* This container ensures the Login card stays in the middle of the screen */
+/* --- Auth Pages (Login/Register) --- */
 .auth-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Full screen height */
+    height: 100vh;
 }
 
 .card {
     background: white;
-    padding: 2.5rem;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    width: 380px;
-    text-align: center;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 350px;
 }
 
 .card h2 {
+    text-align: center;
     color: #007bff;
-    margin-bottom: 1.5rem;
+    margin-top: 0;
 }
 
-/* --- 3. FORM ELEMENTS --- */
+/* --- Form Elements --- */
 input, select, textarea {
     width: 100%;
     padding: 12px;
     margin: 10px 0;
     border: 1px solid #ddd;
-    border-radius: 6px;
-    box-sizing: border-box; /* Important: keeps padding inside the width */
+    border-radius: 4px;
+    box-sizing: border-box; /* Crucial for padding */
 }
 
-/* --- 4. NAVIGATION BAR (Dashboard Fix) --- */
-.navbar {
-    background-color: #333;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 5%;
-}
-
-.navbar-logo {
-    color: #4CAF50;
-    margin: 0;
-    font-size: 1.6rem;
-}
-
-/* This fixes the horizontal alignment of Post Job and Logout */
-.nav-right {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 15px;
-}
-
-/* --- 5. UNIFIED BUTTONS --- */
+/* --- Unified Buttons --- */
 .btn {
     width: 100%;
     padding: 12px;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
     font-size: 16px;
-    transition: 0.3s;
+    transition: background 0.3s;
 }
 
 .btn-primary { background-color: #007bff; color: white; }
 .btn-primary:hover { background-color: #0056b3; }
 
-.btn-success { background-color: #28a745; color: white; width: auto !important; padding: 10px 20px; }
+.btn-success { background-color: #28a745; color: white; }
 .btn-success:hover { background-color: #218838; }
 
+/* --- Messages --- */
+.error {
+    color: #721c24;
+    background-color: #f8d7da;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    display: none; /* Hidden by default for JS */
+}
+
+.success {
+    color: #155724;
+    background-color: #d4edda;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    text-align: center;
+    display: none;
+}
+.main-navbar {
+    background: #333;
+    padding: 10px 20px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-logo {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.navbar-links a {
+    color: white;
+    text-decoration: none;
+}
+
 .btn-logout {
-    background-color: #dc3545;
+    background: #dc3545;
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
+    padding: 8px 16px;
+    border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
 }
+/* --- Global Reset --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f2f5;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
 
-/* --- 6. DASHBOARD CONTENT & GRID --- */
-.container {
-    max-width: 1100px;
-    margin: 30px auto;
-    padding: 0 20px;
+/* --- Navigation Bar --- */
+.main-navbar {
+    background: #333;
+    padding: 10px 20px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.navbar-logo {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.navbar-links a { color: white; text-decoration: none; }
+
+/* --- Auth Pages (Login/Register Centering) --- */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.card {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 350px;
+}
+
+/* --- Form Elements --- */
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* --- Unified Buttons --- */
+.btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+.btn-primary { background-color: #007bff; color: white; }
+.btn-success { background-color: #28a745; color: white; }
+.btn-logout { background: #dc3545; color: white; width: auto; padding: 8px 16px; }
+
+/* --- Job Cards (Dashboard) --- */
+.container { max-width: 900px; margin: auto; padding: 20px; }
+.job-card {
+    background: white;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border-left: 6px solid #007bff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.tech-pill {
+    background: #e9ecef;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    margin-right: 5px;
+    display: inline-block;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 5%;
+    background: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+    align-items: center;
 }
 
 .job-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px;
+    gap: 20px;
+    margin-top: 20px;
 }
 
-.job-card {
-    background: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    border-top: 5px solid #007bff;
+.btn-logout {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
-/* --- 7. UTILITIES --- */
-.text-center { text-align: center; }
-.mt-3 { margin-top: 15px; }
-a { color: #007bff; text-decoration: none; }
-a:hover { text-decoration: underline; }
+.btn-logout:hover {
+    background-color: #c82333;
+}
+/* --- Messages --- */
+.error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px; /* Creates space above the username input */
+    font-size: 14px;
+    display: none; /* Stay hidden until error occurs */
+    text-align: center;
+}
