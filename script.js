@@ -1,37 +1,68 @@
-// Change this to your deployed backend URL later (e.g., https://your-app.render.com)
 const API_URL = "http://localhost:8080";
 
-// --- SHARED UTILITIES ---
-// Combined navbar loader with logout logic
-async function loadNavbar() {
-    const placeholder = document.getElementById('navbar-placeholder');
-    if (!placeholder) return;
+// --- 1. AUTH GUARD ---
+(function checkAuth() {
+    if (window.location.pathname.includes("dashboard.html")) {
+        const user = localStorage.getItem('username');
+        if (!user) window.location.replace("index.html");
+    }
+})();
 
-    try {
-        const resp = await fetch('navbar.html');
-        const html = await resp.text();
-        placeholder.innerHTML = html;
+// --- 2. UI PROTECTION (Crucial for Role-Based View) ---
+function setupDashboardUI() {
+    const role = localStorage.getItem('userRole');
+    const addJobBtn = document.getElementById('btn-add-job');
 
-        // Attach logout event after navbar is injected
-        const logoutBtn = document.getElementById('logoutBtn');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', () => {
-                fetch(`${API_URL}/logout`, { method: 'POST' }).catch(() => {});
-                localStorage.clear();
-                window.location.href = "index.html?logout=true";
-            });
+    console.log("DEBUG: Current Role in Storage ->", role);
+
+    if (addJobBtn) {
+        // Start by hiding it
+        addJobBtn.style.display = 'none';
+
+        // Strict check: Only show if the string matches exactly
+        if (role === 'ROLE_RECRUITER') {
+            addJobBtn.style.display = 'block';
+            console.log("RESULT: Recruiter detected. Showing Post Button.");
+        } else {
+            console.log("RESULT: User detected. Keeping Post Button hidden.");
         }
-    } catch (err) {
-        console.error("Navbar failed to load:", err);
     }
 }
 
-// --- LOGIN LOGIC ---
+// --- 3. FETCH JOBS (Fixed URL and Error Handling) ---
+async function fetchJobs() {
+    const jobContainer = document.getElementById('job-container');
+    if (!jobContainer) return;
+
+    try {
+        // Using /jobs to match your Spring Boot permitAll configuration
+        const response = await fetch(`${API_URL}/jobs`);
+
+        if (!response.ok) {
+            console.error("Fetch failed with status:", response.status);
+            throw new Error("Forbidden or Not Found");
+        }
+
+        const jobs = await response.json();
+        jobContainer.innerHTML = jobs.map(job => `
+            <div class="job-card">
+                <h3>${job.profile}</h3>
+                <p>${job.description}</p>
+                <p><strong>Exp:</strong> ${job.exp} years</p>
+                <button class="btn-apply">Apply Now</button>
+            </div>
+        `).join('');
+    } catch (err) {
+        console.error("Job Fetch Error:", err);
+        jobContainer.innerHTML = `<p style="color: grey;">Login to see available jobs or check backend connection.</p>`;
+    }
+}
+
+// --- 4. LOGIN LOGIC ---
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-
         const credentials = {
             username: document.getElementById('username').value,
             password: document.getElementById('password').value
@@ -45,109 +76,31 @@ if (loginForm) {
             });
 
             if (response.ok) {
-                window.location.href = "dashboard.html";
+                const data = await response.json();
+                // Save exactly what comes from Java
+                localStorage.setItem('username', data.username);
+                localStorage.setItem('userRole', data.role);
+                window.location.replace("dashboard.html");
             } else {
-                document.getElementById('error-message').style.display = 'block';
+                alert("Invalid Username or Password");
             }
-        } catch (error) {
-            console.warn("Backend offline. Entering Demo Mode...");
-            window.location.href = "dashboard.html"; // Demo redirect
+        } catch (err) {
+            console.error("Connection Error:", err);
+            alert("Cannot connect to backend.");
         }
     });
 }
 
-// --- REGISTRATION LOGIC ---
-const registerForm = document.getElementById('registerForm');
-if (registerForm) {
-    registerForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+function logout() {
+    localStorage.clear();
+    window.location.replace("index.html");
+}
 
-        const userData = {
-            username: document.getElementById('reg-username').value,
-            email: document.getElementById('reg-email').value,
-            password: document.getElementById('reg-password').value,
-            role: document.getElementById('role').value,
-            phoneNumber: document.getElementById('reg-phone').value
-        };
-
-        try {
-            const response = await fetch(`${API_URL}/register`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(userData)
-            });
-
-            if (response.ok) {
-                alert("Registration successful! Redirecting to login...");
-                window.location.href = "index.html";
-            } else {
-                alert("Registration failed. Please try again.");
-            }
-        } catch (error) {
-            console.warn("Backend offline. Redirecting for frontend demo...");
-            alert("Registration successful (Demo Mode)!");
-            window.location.href = "index.html";
-        }
+// --- 5. INITIALIZE (Run UI Setup First) ---
+if (window.location.pathname.includes("dashboard.html")) {
+    document.addEventListener('DOMContentLoaded', () => {
+        // UI Setup must run FIRST so the button hides before the network call starts
+        setupDashboardUI();
+        fetchJobs();
     });
 }
-
-// --- DASHBOARD: LOAD JOBS ---
-async function loadJobs() {
-    const jobContainer = document.getElementById('job-container');
-    if (!jobContainer) return;
-
-    try {
-        const response = await fetch(`${API_URL}/api/jobs`);
-        const jobs = await response.json();
-
-        jobContainer.innerHTML = jobs.map(job => `
-            <div class="job-card">
-                <h2>${job.profile}</h2>
-                <p>${job.description}</p>
-                <p><strong>Experience:</strong> ${job.exp} years</p>
-                <div>
-                    ${job.techStack.map(tech => `<span class="tech-pill">${tech}</span>`).join('')}
-                </div>
-            </div>
-        `).join('');
-    } catch (err) {
-        console.error("Failed to fetch jobs. Showing placeholder data.");
-        jobContainer.innerHTML = `<p style="text-align:center; color:#888;">Connect your Spring Boot backend to see live jobs.</p>`;
-    }
-}
-
-// --- ADD JOB LOGIC ---
-const addJobForm = document.getElementById('addJobForm');
-if (addJobForm) {
-    addJobForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const techStackArray = document.getElementById('techStack').value.split(',').map(item => item.trim());
-
-        const jobData = {
-            profile: document.getElementById('profile').value,
-            description: document.getElementById('description').value,
-            exp: parseInt(document.getElementById('exp').value),
-            techStack: techStackArray
-        };
-
-        try {
-            const response = await fetch(`${API_URL}/saveJob`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(jobData)
-            });
-
-            if (response.ok) {
-                alert("Job posted successfully!");
-                window.location.href = "dashboard.html";
-            }
-        } catch (error) {
-            alert("Backend offline. Post saved locally (Demo).");
-            window.location.href = "dashboard.html";
-        }
-    });
-}
-
-// --- INITIALIZE ---
-loadNavbar();
-loadJobs();
