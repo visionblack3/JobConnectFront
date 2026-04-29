@@ -2,19 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - JobConnect</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="navbar-placeholder"></div>
-<div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h1>Available Jobs</h1>
-        <a href="add-job.html" class="btn btn-success" style="width: auto;">+ Post Job</a>
+
+<nav class="navbar">
+    <div class="nav-left">
+        <h2>JobConnect</h2>
+        <p>Welcome, <span id="display-username" style="color: #28a745; font-weight: bold;"></span></p>
     </div>
-    <div id="job-container">
+    <div class="nav-right">
+        <button id="btn-add-job" class="btn btn-success" onclick="window.location.href='add-job.html'" style="display:none;">+ Post Job</button>
+        <button onclick="logout()" class="btn-logout">Logout</button>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="header-section">
+        <h1>Available Job Openings</h1>
+        <hr>
+    </div>
+
+    <div id="job-container" class="job-grid">
+        <p id="loading-text">Loading jobs...</p>
     </div>
 </div>
+
+<script>
+    (function() {
+        const user = localStorage.getItem('username');
+        if (!user) {
+            window.location.replace("index.html");
+        }
+    })();
+</script>
+
 <script src="script.js"></script>
 </body>
 </html>
