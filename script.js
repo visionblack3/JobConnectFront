@@ -12,6 +12,7 @@ const API_URL = "http://localhost:8080";
 function setupDashboardUI() {
     // Trim and convert to uppercase to prevent small typos from breaking it
     const role = (localStorage.getItem('userRole') || "").toUpperCase();
+    console.log(role);
     const addJobBtn = document.getElementById('btn-add-job');
 
     if (addJobBtn) {
