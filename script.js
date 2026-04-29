@@ -10,25 +10,20 @@ const API_URL = "http://localhost:8080";
 
 // --- 2. UI PROTECTION (Crucial for Role-Based View) ---
 function setupDashboardUI() {
-    const role = localStorage.getItem('userRole');
+    // Trim and convert to uppercase to prevent small typos from breaking it
+    const role = (localStorage.getItem('userRole') || "").toUpperCase();
     const addJobBtn = document.getElementById('btn-add-job');
 
-    console.log("DEBUG: Current Role in Storage ->", role);
-
     if (addJobBtn) {
-        // Start by hiding it
-        addJobBtn.style.display = 'none';
+        addJobBtn.style.display = 'none'; // Default hide
 
-        // Strict check: Only show if the string matches exactly
-        if (role === 'ROLE_RECRUITER') {
+        // Check for both common formats
+        if (role === 'ROLE_RECRUITER' || role === 'RECRUITER') {
             addJobBtn.style.display = 'inline-block';
-            console.log("RESULT: Recruiter detected. Showing Post Button.");
-        } else {
-            console.log("RESULT: User detected. Keeping Post Button hidden.");
+            console.log("SUCCESS: Button displayed for Recruiter");
         }
     }
 }
-
 // --- 3. FETCH JOBS (Fixed URL and Error Handling) ---
 async function fetchJobs() {
     const jobContainer = document.getElementById('job-container');
